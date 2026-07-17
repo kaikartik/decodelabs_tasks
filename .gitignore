@@ -1,0 +1,4 @@
+node_modules/
+task2/server/data/journal.db
+task3/server/data/journal.db
+.vscode/

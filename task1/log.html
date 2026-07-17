@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Log — Kartik Saxena</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .log-hero {
+    padding: 160px 8vw 60px;
+    position: relative;
+  }
+  .log-ghost {
+    top: 8%; left: -1%;
+    font-size: clamp(90px,15vw,220px);
+    opacity: .5;
+    -webkit-text-stroke: 1.2px var(--line);
+    font-family: var(--font-head);
+    font-weight: 600;
+    font-style: normal;
+    z-index: 0;
+  }
+  .log-hero-content {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ---- Feed ---- */
+  .feed {
+    padding: 0 8vw 140px;
+    max-width: 860px;
+  }
+  .feed-entry {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 0 28px;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--line);
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity .5s ease, transform .5s ease;
+  }
+  .feed-entry.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* type badge */
+  .entry-type {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    padding: 5px 0;
+    color: var(--muted);
+    padding-top: 4px;
+  }
+  .entry-type.DSA    { color: #5b8dd9; }
+  .entry-type.BUILD  { color: var(--accent); }
+  .entry-type.VIDEO  { color: #e8a020; }
+  .entry-type.MUSIC  { color: #8b6bbf; }
+  .entry-type.LIFE   { color: #5aaa72; }
+
+  .entry-body {}
+  .entry-title {
+    font-family: var(--font-head);
+    font-size: clamp(15px, 1.4vw, 20px);
+    font-weight: 400;
+    line-height: 1.35;
+    color: var(--ink);
+  }
+  .entry-meta {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 8px;
+  }
+  .entry-date {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: .1em;
+    color: var(--muted);
+  }
+  .entry-link {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: color .2s;
+  }
+  .entry-link:hover { color: var(--accent); }
+  .entry-link::before {
+    content: '↗';
+    font-size: 10px;
+  }
+
+  /* platform pill */
+  .platform-pill {
+    font-family: var(--font-mono);
+    font-size: 8px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border: 1px solid var(--line);
+    color: var(--muted);
+    border-radius: 2px;
+  }
+
+  /* loading + error states */
+  .feed-state {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .1em;
+    color: var(--muted);
+    padding: 40px 0;
+  }
+  .feed-count {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--line);
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="index.html" class="nav-name" style="text-decoration:none;">
+    <span>Kartik</span><span>Saxena</span>
+  </a>
+  <button class="menu-icon" id="hamburgerBtn" aria-label="Open menu">
+    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <line x1="6" y1="14" x2="34" y2="14" stroke="currentColor" stroke-width="1.4"/>
+      <line x1="6" y1="20" x2="24" y2="20" stroke="currentColor" stroke-width="1.4"/>
+      <line x1="6" y1="26" x2="29" y2="26" stroke="currentColor" stroke-width="1.4"/>
+      <circle cx="34" cy="26" r="2.4" fill="var(--accent)"/>
+    </svg>
+  </button>
+</nav>
+
+<div class="drawer" id="drawer">
+  <button class="drawer-close" id="drawerClose" aria-label="Close menu">&times;</button>
+  <a href="index.html">Home</a>
+  <a href="index.html#about">About</a>
+  <a href="log.html">The Log</a>
+  <a href="portfolio.html">Portfolio</a>
+  <a href="index.html#contact">Contact</a>
+</div>
+
+<!-- HERO -->
+<section class="log-hero">
+  <div class="ghost-type log-ghost" aria-hidden="true">LOG</div>
+  <div class="log-hero-content">
+    <div class="eyebrow">qvrtik — activity feed</div>
+    <h1 style="font-family:var(--font-head); font-size:clamp(48px,8vw,110px); line-height:1.05; margin-top:16px;">
+      The <em>Log.</em>
+    </h1>
+    <p style="font-size:clamp(13px,1.1vw,17px); color:var(--ink-soft); margin-top:20px; max-width:480px; font-weight:300; line-height:1.75;">
+      Everything I'm building, solving, and shipping — documented in real time across DSA, dev projects, content, and music.
+    </p>
+  </div>
+</section>
+
+<!-- FEED -->
+<section class="feed">
+  <div class="feed-count" id="feedCount">Loading entries...</div>
+  <div id="feedContainer">
+    <div class="feed-state">Fetching from server...</div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee">
+  <div class="marquee-track">
+    <span>THE LOG</span><span class="dot">•</span>
+    <span>DSA · BUILD · VIDEO · MUSIC · LIFE</span><span class="dot">•</span>
+    <span>DOCUMENTED IN REAL TIME</span><span class="dot">•</span>
+    <span>THE LOG</span><span class="dot">•</span>
+    <span>DSA · BUILD · VIDEO · MUSIC · LIFE</span><span class="dot">•</span>
+    <span>DOCUMENTED IN REAL TIME</span><span class="dot">•</span>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-name">Kartik Saxena</div>
+  <div class="footer-copy">© 2026 — All rights reserved</div>
+  <div class="footer-links">
+    <a href="https://instagram.com/qvrtik" target="_blank" rel="noopener">Instagram</a>
+    <a href="https://linkedin.com/in/ikartiksaxena" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="https://github.com/kaikartik" target="_blank" rel="noopener">GitHub</a>
+    <a href="https://youtube.com/@qvrtik" target="_blank" rel="noopener">YouTube</a>
+  </div>
+</footer>
+
+<script>
+const API = 'http://localhost:3000/api/log';
+
+// ---- Render helpers ----
+function platformLabel(platform) {
+  if (!platform) return '';
+  const map = {
+    linkedin: 'LinkedIn',
+    github: 'GitHub',
+    youtube: 'YouTube',
+    instagram: 'Instagram'
+  };
+  return map[platform] || platform;
+}
+
+function formatDate(dateStr) {
+  const d = new Date(dateStr + 'T00:00:00');
+  return d.toLocaleDateString('en-IN', {
+    day: 'numeric', month: 'short', year: 'numeric'
+  });
+}
+
+function renderEntry(entry) {
+  return `
+    <div class="feed-entry reveal">
+      <div class="entry-type ${entry.type}">${entry.type}</div>
+      <div class="entry-body">
+        <div class="entry-title">${entry.title}</div>
+        <div class="entry-meta">
+          <span class="entry-date">${formatDate(entry.date)}</span>
+          ${entry.platform
+            ? `<span class="platform-pill">${platformLabel(entry.platform)}</span>`
+            : ''}
+          ${entry.link
+            ? `<a class="entry-link" href="${entry.link}" target="_blank" rel="noopener">View</a>`
+            : ''}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ---- Fetch and render feed ----
+async function loadFeed() {
+  const container = document.getElementById('feedContainer');
+  const countEl = document.getElementById('feedCount');
+
+  try {
+    const res = await fetch(API);
+    if (!res.ok) throw new Error(`Server responded with ${res.status}`);
+
+    const json = await res.json();
+    const entries = json.data;
+
+    countEl.textContent = `${entries.length} entr${entries.length === 1 ? 'y' : 'ies'}`;
+
+    if (entries.length === 0) {
+      container.innerHTML = '<div class="feed-state">No entries yet.</div>';
+      return;
+    }
+
+    container.innerHTML = entries.map(renderEntry).join('');
+
+    // Trigger scroll reveal
+    const io = new IntersectionObserver((obs) => {
+      obs.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.feed-entry').forEach(el => io.observe(el));
+
+  } catch (err) {
+    countEl.textContent = 'Could not load entries';
+    container.innerHTML = `
+      <div class="feed-state">
+        API not reachable — make sure the server is running on localhost:3000
+      </div>`;
+    console.error('Feed error:', err);
+  }
+}
+
+// ---- Nav / drawer ----
+document.getElementById('hamburgerBtn')?.addEventListener('click', () =>
+  document.getElementById('drawer').classList.add('open'));
+document.getElementById('drawerClose')?.addEventListener('click', () =>
+  document.getElementById('drawer').classList.remove('open'));
+document.querySelectorAll('#drawer a').forEach(a =>
+  a.addEventListener('click', () =>
+    document.getElementById('drawer').classList.remove('open')));
+
+// ---- Init ----
+loadFeed();
+</script>
+
+</body>
+</html>
