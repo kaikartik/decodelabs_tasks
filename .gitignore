@@ -2,3 +2,16 @@ node_modules/
 task2/server/data/journal.db
 task3/server/data/journal.db
 .vscode/
+task2/server/data/journal.db
+task2/server/data/journal.db-shm
+task2/server/data/journal.db-wal
+task3/server/data/journal.db
+task3/server/data/journal.db-shm
+task3/server/data/journal.db-wal
+
+task2/server/data/journal.db
+task2/server/data/journal.db-shm
+task2/server/data/journal.db-wal
+task3/server/data/journal.db
+task3/server/data/journal.db-shm
+task3/server/data/journal.db-wal
