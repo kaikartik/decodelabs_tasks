@@ -19,4 +19,4 @@ Open `index.html` in a browser or use Live Server in VS Code.
 Server must be running (Task 2) for the Log feed to populate.
 
 ## Live demo
-[View on GitHub Pages](https://kaikartik.github.io/decodelabs_tasks/task1)
+[View on GitHub Pages](https://kaikartik.github.io/decodelabs_tasks/)
